@@ -69,7 +69,6 @@ add_library(
     SHARED
     src/main/cpp/mnnnetnative.cpp
     src/main/cpp/mnnmodulennative.cpp
-    src/main/cpp/mnnllmnative.cpp
     # mnnportraitnative.cpp 使用的是不同的包名，这里不需要
 )
 
@@ -84,8 +83,8 @@ target_include_directories(MNNWrapper PRIVATE
 )
 
 # 添加编译选项以解决 TLS 问题
-target_compile_options(MNNWrapper PRIVATE -fno-emulated-tls)
-target_compile_options(MNN PRIVATE -fno-emulated-tls)
+target_compile_options(MNNWrapper PRIVATE -femulated-tls)
+target_compile_options(MNN PRIVATE -femulated-tls)
 if(TARGET llm)
     target_compile_options(llm PRIVATE -fno-emulated-tls)
     if(EXISTS "${MNN_SOURCE_DIR}/transformers/llm/engine/src/minja/chat_template.hpp")
