@@ -20,7 +20,7 @@ android {
 
         ndk {
             // 支持的 ABI（与主 app 保持一致）
-            abiFilters.addAll(listOf("arm64-v8a"))
+            abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a"))
         }
 
         externalNativeBuild {
@@ -42,8 +42,7 @@ android {
                     "-DMNN_OPENCL=OFF",
                     "-DMNN_OPENGL=OFF",
                     "-DMNN_VULKAN=OFF",
-                    "-DMNN_ARM82=ON",
-                    // 启用 LLM 支持
+                                        // 启用 LLM 支持
                     "-DMNN_BUILD_LLM=ON",
                     "-DMNN_SUPPORT_TRANSFORMER_FUSE=ON",
                     "-DMNN_LOW_MEMORY=ON",
