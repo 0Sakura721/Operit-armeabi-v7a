@@ -43,7 +43,7 @@ android {
                     "-DMNN_OPENGL=OFF",
                     "-DMNN_VULKAN=OFF",
                                         // 启用 LLM 支持
-                    "-DMNN_BUILD_LLM=ON",
+                    "-DMNN_BUILD_LLM=OFF",
                     "-DMNN_SUPPORT_TRANSFORMER_FUSE=ON",
                     "-DMNN_LOW_MEMORY=ON",
                     "-DMNN_CPU_WEIGHT_DEQUANT_GEMM=ON"
