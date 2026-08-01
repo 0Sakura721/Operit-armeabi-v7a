@@ -27,7 +27,8 @@ android {
                     "-DANDROID_STL=c++_static",
                     "-DANDROID_PLATFORM=android-26",
                     "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON",
-                    "-DLLAMA_BUILD_COMMON=ON"
+                    "-DLLAMA_BUILD_COMMON=ON",
+                    "-DGGML_LLAMAFILE=OFF"
                 )
             }
         }
