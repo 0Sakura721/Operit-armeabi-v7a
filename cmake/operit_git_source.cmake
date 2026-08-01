@@ -68,7 +68,11 @@ function(operit_declare_git_source dependency_name repository git_ref)
     operit_github_archive_url(archive_url "${repository}" "${resolved_sha}")
     operit_normalize_source_token(source_token "${dependency_name}-${resolved_sha}")
 
-    set(deps_root "${CMAKE_SOURCE_DIR}/.cxx/operit_deps")
+    if(DEFINED ANDROID_ABI)
+        set(deps_root "${CMAKE_SOURCE_DIR}/.cxx/operit_deps_${ANDROID_ABI}")
+    else()
+        set(deps_root "${CMAKE_SOURCE_DIR}/.cxx/operit_deps")
+    endif()
     set(source_dir "${deps_root}/${source_token}-src")
     set(binary_dir "${deps_root}/${source_token}-build")
 
