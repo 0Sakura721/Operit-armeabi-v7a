@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.22.1)
 
 project("llama_jni")
+# armeabi-v7a: bionic ELF TLS (__tls_get_addr) requires API 29+ on 32-bit ARM;
+# use NDK default emulated TLS (works on API 26) for v7a only, keep ELF TLS on arm64.
+if(ANDROID_ABI STREQUAL "armeabi-v7a")
+    string(REPLACE "-fno-emulated-tls" "-femulated-tls" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif()
+
 
 include("${CMAKE_CURRENT_LIST_DIR}/../cmake/operit_git_source.cmake")
 
