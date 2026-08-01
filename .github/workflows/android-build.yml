@@ -222,14 +222,14 @@ jobs:
             *) echo "Unsupported workflow event: $EVENT_NAME" >&2; exit 2 ;;
           esac
           chmod +x ./gradlew
-          ./gradlew "$gradle_task" --stacktrace --no-build-cache --no-daemon -x lint -x lintVital -x lintVitalNightly -x lintVitalRelease -x lintVitalDebug -x lintVitalNightly -x lintVitalRelease
+          ./gradlew "$gradle_task" --stacktrace --no-build-cache --no-daemon -x lint -x lintVitalNightly -x lintVitalRelease -x lintVitalNightly -x lintVitalRelease
 
       - name: Run JVM unit tests
         if: >-
           !cancelled() &&
           steps.gradle-build.outcome == 'success' &&
           (github.event_name == 'push' || inputs.run_unit_tests)
-        run: ./gradlew :app:testDebugUnitTest --stacktrace --no-build-cache --no-daemon -x lint -x lintVital -x lintVitalNightly -x lintVitalRelease -x lintVitalDebug -x lintVitalNightly -x lintVitalRelease
+        run: ./gradlew :app:testDebugUnitTest --stacktrace --no-build-cache --no-daemon -x lint -x lintVitalNightly -x lintVitalRelease -x lintVitalNightly -x lintVitalRelease
 
       - name: Upload Android reports
         if: always()
