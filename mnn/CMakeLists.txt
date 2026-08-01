@@ -5,6 +5,8 @@ project("mnn_jni")
 # use NDK default emulated TLS (works on API 26) for v7a only, keep ELF TLS on arm64.
 if(ANDROID_ABI STREQUAL "armeabi-v7a")
     string(REPLACE "-fno-emulated-tls" "-femulated-tls" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    # Force emulated TLS on every target (appended last so it wins over any stale flag).
+    add_compile_options("-femulated-tls")
 endif()
 
 
