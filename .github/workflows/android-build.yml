@@ -24,7 +24,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 env:
   JAVA_VERSION: '21'
@@ -218,16 +218,3 @@ jobs:
             app/build/outputs/bundle/**/*.aab
           if-no-files-found: error
           retention-days: 14
-      - name: Publish GitHub Release (operit-armeabi-v7a.apk)
-        if: success()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          mkdir -p release_assets
-          APK=$(find app/build/outputs/apk -name '*.apk' -type f | head -1)
-          if [ -z "$APK" ]; then echo 'no apk found'; exit 1; fi
-          cp "$APK" release_assets/operit-armeabi-v7a.apk
-          ls -lh release_assets/
-          gh release delete "v1.12.0-v7a" --yes --cleanup-tag 2>/dev/null || true
-          gh release create "v1.12.0-v7a" release_assets/operit-armeabi-v7a.apk \n            --repo "${{ github.repository }}" \n            --title "Operit armeabi-v7a v1.12.0" \n            --notes "Operit 兼容 armeabi-v7a（32位）版本，适用于 MT6580 等 ARMv7 设备。包名: com.ai.assistance.operit" \n            --latest
