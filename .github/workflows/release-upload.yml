@@ -1,0 +1,60 @@
+name: Publish Release (cloud upload)
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Build run ID to publish (empty = latest successful)'
+        required: false
+        default: ''
+      tag:
+        description: 'Release tag'
+        required: false
+        default: 'v1.12.0-v7a'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve run ID
+        id: resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -n "${{ github.event.inputs.run_id }}" ]; then
+            echo "run_id=${{ github.event.inputs.run_id }}" >> "$GITHUB_OUTPUT"
+          else
+            RUN_ID=$(gh run list --workflow android-build.yml --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+            echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+            echo "Using latest successful run: $RUN_ID"
+          fi
+
+      - name: Download artifact from run
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.resolve.outputs.run_id }}
+          pattern: operit-android-*
+          path: artifact
+          merge-multiple: true
+
+      - name: Find and rename APK
+        run: |
+          find artifact -name '*.apk' -exec ls -la {} \;
+          APK=$(find artifact -name '*.apk' -path '*release*' | head -1)
+          [ -z "$APK" ] && APK=$(find artifact -name '*.apk' | head -1)
+          echo "Using APK: $APK"
+          cp "$APK" ./operit-armeabi-v7a.apk
+          ls -la ./operit-armeabi-v7a.apk
+          file ./operit-armeabi-v7a.apk
+
+      - name: Upload APK to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          files: operit-armeabi-v7a.apk
+          generate_release_notes: false
